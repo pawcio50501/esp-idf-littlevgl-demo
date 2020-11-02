@@ -1,7 +1,6 @@
 [submodule "components/esp-idf-littlevgl"]
 	path = components/esp-idf-littlevgl
-	url = git@github.com:lbthomsen/esp-idf-littlevgl.git
-	branch = master
+	url = git@github.com:pawcio50501/esp-idf-littlevgl.git
 [submodule "components/examples/lv_examples"]
 	path = components/examples/lv_examples
-	url = git@github.com:littlevgl/lv_examples.git
+	url = git@github.com:pawcio50501/lv_examples.git
