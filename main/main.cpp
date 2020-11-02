@@ -9,39 +9,38 @@
 #include "freertos/task.h"
 #include "esp_system.h"
 #include "driver/gpio.h"
+#include <lv_conf.h>
 #include "lvgl/lvgl.h"
-#include "lv_examples/lv_apps/demo/demo.h"
+#include "lv_examples/src/lv_demo_widgets/lv_demo_widgets.h"
 #include "esp_freertos_hooks.h"
 
 
 #include "disp_spi.h"
-#include "st7789.h"
+#include "ili9488.h"
 
 static void IRAM_ATTR lv_tick_task(void);
 
-extern "C"
-{
-    void app_main(void);
-}
-
-void app_main()
+extern "C" void app_main(void)
 {
 	lv_init();
 
 	disp_spi_init();
-	st7789_init();
+	ili9488_init();
+
+    //todo... move xpt2046 support to the dedicated file...
 
 	//tp_spi_init();
     //xpt2046_init();
 
     static lv_color_t buf1[DISP_BUF_SIZE];
     static lv_color_t buf2[DISP_BUF_SIZE];
+
     static lv_disp_buf_t disp_buf;
     lv_disp_buf_init(&disp_buf, buf1, buf2, DISP_BUF_SIZE);
 
 	lv_disp_drv_t disp_drv;
 	lv_disp_drv_init(&disp_drv);
-	disp_drv.flush_cb = st7789_flush;
+	disp_drv.flush_cb = ili9488_flush;
 	disp_drv.buffer = &disp_buf;
 	lv_disp_drv_register(&disp_drv);
 
@@ -57,7 +56,7 @@ void app_main()
 
 	esp_register_freertos_tick_hook(lv_tick_task);
 
-	demo_create();
+	lv_demo_widgets();
 
 	while(1) {
 		vTaskDelay(1);
